@@ -1,0 +1,27 @@
+<div class="row justify-content-md-center">
+
+<div class="col-lg-5 col-md-6 position-absolute top-50 start-50 translate-middle">
+  <div class="card card-login">
+    <div class="card-header">
+      CommCare Utils
+    </div>
+    <div class="card-body">
+      <div class="row mb-3 text-start">
+        <p>
+          Please enter the one-time code sent to your email address.
+        </p>
+        <%= form_with(model: @session, url: url_for(action: 'update'), scope: 'passwordless', method: 'patch', data: { turbo: false }) do |f| %>
+          <div class="form-floating mb-3">
+            <%= f.text_field :token,
+              required: true,
+              autofocus: true,
+              class: 'form-control mb-2',
+              autocomplete: "one-time-code" %>
+            <%= f.label :token, "One-time code" %>
+          </div>
+          <%= f.submit "Confirm", class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

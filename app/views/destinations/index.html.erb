@@ -1,0 +1,35 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Destinations</h1>
+  <%= link_to 'New Destination', new_destination_path, class: 'btn btn-outline-primary' %>
+</div>
+
+<% if @destinations.any? %>
+  <div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>CommCare Username</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @destinations.each do |destination| %>
+          <tr>
+            <td><%= destination.name %></td>
+            <td><%= destination.commcare_username %></td>
+            <td>
+              <%= link_to 'Show', destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>
+              <%= link_to 'Edit', edit_destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>
+              <%= link_to 'Delete', destination_path(destination), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-info">
+    No destinations found. <%= link_to 'Create one', new_destination_path %>
+  </div>
+<% end %>

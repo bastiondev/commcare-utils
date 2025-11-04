@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><%= @destination.name %></h1>
+      <div>
+        <%= link_to 'Edit', edit_destination_path(@destination), class: 'btn btn-outline-primary' %>
+        <%= link_to 'Delete', destination_path(@destination), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger' %>
+        <%= link_to 'Back', destinations_path, class: 'btn btn-outline-secondary' %>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <h6 class="text-muted">CommCare Username</h6>
+            <p><%= @destination.commcare_username %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Destination Sources</h3>
+
+    <% if @destination.destination_sources.any? %>
+      <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>URL</th>
+              <th>Key Column</th>
+              <th>Table Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @destination.destination_sources.each do |source| %>
+              <tr>
+                <td><%= source.name %></td>
+                <td><%= source.url %></td>
+                <td><%= source.key_column %></td>
+                <td><%= source.table_name %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        No destination sources configured.
+      </div>
+    <% end %>

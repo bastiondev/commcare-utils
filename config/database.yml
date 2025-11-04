@@ -1,0 +1,34 @@
+# PostgreSQL. Versions 9.3 and up are supported.
+#
+#   gem install pg
+#
+#   Ensure the pg gem is defined in your Gemfile
+#   gem "pg"
+#
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV["DATABASE_URL"] %>
+  schema_search_path: "public"
+queue_default: &queue_default
+  <<: *default
+  schema_search_path: "queue"
+
+development:
+  primary:
+    <<: *default
+  queue:
+    <<: *queue_default
+
+test:
+  primary:
+    <<: *default
+  queue:
+    <<: *queue_default
+
+production:
+  primary:
+    <<: *default
+  queue:
+    <<: *queue_default

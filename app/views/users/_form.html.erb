@@ -1,0 +1,22 @@
+<%= form_with(model: @user, local: true) do |form| %>
+  <% if @user.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h4>
+      <ul class="mb-0">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :email, class: 'form-label form-label-sm' %>
+    <%= form.email_field :email, class: 'form-control form-control-sm', required: true %>
+  </div>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+    <%= form.submit class: 'btn btn-outline-primary' %>
+    <%= link_to 'Cancel', @user.persisted? ? user_path(@user) : users_path, class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>

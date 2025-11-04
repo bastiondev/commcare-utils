@@ -1,0 +1,44 @@
+<%= form_with(model: @destination, local: true) do |form| %>
+  <% if @destination.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@destination.errors.count, "error") %> prohibited this destination from being saved:</h4>
+      <ul class="mb-0">
+        <% @destination.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-lg-4 mb-3">
+      <%= form.label :name, class: 'form-label form-label-sm' %>
+      <%= form.text_field :name, class: 'form-control form-control-sm', required: true %>
+    </div>
+
+    <div class="col-lg-4 mb-3">
+      <%= form.label :commcare_username, class: 'form-label form-label-sm' %>
+      <%= form.text_field :commcare_username, class: 'form-control form-control-sm', required: true %>
+    </div>
+
+    <div class="col-lg-4 mb-3">
+      <%= form.label :commcare_password, class: 'form-label form-label-sm' %>
+      <%= form.password_field :commcare_password, class: 'form-control form-control-sm', required: !@destination.persisted? %>
+      <% if @destination.persisted? %>
+        <small class="form-text text-muted">Only enter a new password if you want to change it.</small>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-lg-12 mb-3">
+      <%= form.label :database_url, class: 'form-label form-label-sm' %>
+      <%= form.text_field :database_url, class: 'form-control form-control-sm', required: true %>
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+    <%= form.submit class: 'btn btn-outline-primary' %>
+    <%= link_to 'Cancel', @destination.persisted? ? destination_path(@destination) : destinations_path, class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>

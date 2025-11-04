@@ -1,0 +1,34 @@
+<div class="row justify-content-md-center">
+
+<div class="col-lg-6 col-md-8 position-absolute top-50 start-50 translate-middle">
+  <div class="card card-login">
+    <div class="card-header">
+      CommCare Utils
+    </div>
+    <div class="card-body text-start">
+      <div class="row mb-3">
+        <p>
+          Sign in to CommCare Utils
+        </p>
+        <%= form_with(model: @session, 
+          url: url_for(action: 'new'), 
+          class: 'mb-3',
+          data: { turbo: 'false' }
+          ) do |f| 
+        %>
+          <% email_field_name = :"passwordless[#{email_field}]" %>
+          <%= email_field_tag email_field_name,
+              params.fetch(email_field_name, nil),
+              required: true,
+              autofocus: true,
+              placeholder: "Email",
+              class: 'form-control mb-2'
+          %>
+          <%= f.submit "Sign in",
+              class: 'btn btn-primary'
+          %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
