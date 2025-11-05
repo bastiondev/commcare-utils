@@ -3,7 +3,11 @@ class DestinationsController < ApplicationController
   before_action :set_destination, only: [:show, :edit, :update, :destroy]
 
   def index
-    @destinations = Destination.all
+    @destinations = Destination
+      .left_outer_joins(:destination_tokens, :destination_sources)
+      .select('destinations.*, COUNT(DISTINCT destination_tokens.id) as tokens_count, COUNT(DISTINCT destination_sources.id) as sources_count')
+      .group('destinations.id')
+      .order(:name)
   end
 
   def show

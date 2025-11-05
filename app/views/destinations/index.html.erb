@@ -11,6 +11,8 @@
           <th>Name</th>
           <th>Project Name</th>
           <th>CommCare Username</th>
+          <th>Tokens</th>
+          <th>Sources</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -20,6 +22,8 @@
             <td><%= destination.name %></td>
             <td><%= destination.project_name %></td>
             <td><%= destination.commcare_username %></td>
+            <td><%= destination.tokens_count %></td>
+            <td><%= destination.sources_count %></td>
             <td style="white-space: nowrap;">
               <%= link_to 'Show', destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>
               <%= link_to 'Edit', edit_destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>

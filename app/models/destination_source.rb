@@ -36,6 +36,11 @@ class DestinationSource < ApplicationRecord
     (sensitive_fields || '').split(',').map(&:strip).each do |field|
       properties_to_upsert["#{field} *sensitive*"] = Digest::SHA256.hexdigest(properties[field])[0, 15]
     end
+    # Handle indices
+    indices = case_data['indices']
+    indices.each do |index_name, index_data|
+      properties_to_upsert["indices.#{index_data['case_type']}"] = index_data['case_id']
+    end
     ensure_table properties_to_upsert.keys
     upsert_row properties_to_upsert.keys, properties_to_upsert.values, DateTime.now
   end
