@@ -2,7 +2,7 @@
   <h1><%= @user.email %></h1>
   <div>
     <%= link_to 'Edit', edit_user_path(@user), class: 'btn btn-outline-primary' %>
-    <%= link_to 'Delete', user_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger' %>
+    <%= link_to 'Delete', user_path(@user), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this user?' }, class: 'btn btn-outline-danger' %>
     <%= link_to 'Back', users_path, class: 'btn btn-outline-secondary' %>
   </div>
 </div>

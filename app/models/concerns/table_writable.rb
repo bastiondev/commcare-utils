@@ -3,6 +3,9 @@ require 'database_writer'
 module TableWritable
   extend ActiveSupport::Concern
 
+  NULL_PATTERN = /---/
+  LAST_SYNC_COLUMN = '_last_commcare_sync'
+
   def ensure_table _columns
     # Add the last_sync column
     columns = _columns + [LAST_SYNC_COLUMN]
@@ -27,8 +30,8 @@ module TableWritable
   end
 
   def upsert_row _columns, _values, time
-    # Replace NULL_PATTERN with nil
-    values = _values.map{|v| v =~ NULL_PATTERN ? nil : v}
+    # Replace NULL_PATTERN with nil and make sure all strings
+    values = _values.map(&:to_s).map{|v| v =~ NULL_PATTERN ? nil : v}
 
     # Add last_sync timestamps
     columns = _columns + [LAST_SYNC_COLUMN]

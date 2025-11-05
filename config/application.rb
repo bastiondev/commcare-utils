@@ -16,9 +16,8 @@ module CommcareUtils
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Use solid queue for active job
-    config.active_job.queue_adapter = :solid_queue
-    config.solid_queue.connects_to = { database: { writing: :queue } }
+    # Use good_job for active job
+    config.active_job.queue_adapter = :good_job
     
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {

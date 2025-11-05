@@ -35,6 +35,9 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# Good Job for Active Job processing with web console
+gem "good_job"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 

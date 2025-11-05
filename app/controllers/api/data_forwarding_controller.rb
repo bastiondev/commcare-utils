@@ -1,0 +1,40 @@
+module Api
+  class DataForwardingController < ApplicationController
+    skip_before_action :require_user!
+    before_action :authenticate_token!
+
+    def create
+      DataForwardJob.perform_later(@destination_token.id, request.raw_post)
+      render json: { status: 'received' }, status: :accepted
+    end
+
+    private
+
+    def authenticate_token!
+      token = extract_token_from_header
+      
+      unless token
+        return render json: { error: 'Unauthorized' }, status: :unauthorized
+      end
+
+      @destination_token = DestinationToken.find_by(token: token)
+      @destination = @destination_token&.destination
+
+      unless @destination
+        return render json: { error: 'Unauthorized' }, status: :unauthorized
+      end
+    end
+
+    def extract_token_from_header
+      auth_header = request.headers['Authorization']
+      return nil unless auth_header
+
+      # Handle both "Bearer token" and "token" formats
+      if auth_header.start_with?('Bearer ')
+        auth_header.sub(/^Bearer\s+/, '')
+      else
+        auth_header
+      end
+    end
+  end
+end

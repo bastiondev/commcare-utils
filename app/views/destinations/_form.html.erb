@@ -11,17 +11,22 @@
   <% end %>
 
   <div class="row">
-    <div class="col-lg-4 mb-3">
+    <div class="col-lg-3 mb-3">
       <%= form.label :name, class: 'form-label form-label-sm' %>
       <%= form.text_field :name, class: 'form-control form-control-sm', required: true %>
     </div>
 
-    <div class="col-lg-4 mb-3">
+    <div class="col-lg-3 mb-3">
+      <%= form.label :project_name, class: 'form-label form-label-sm' %>
+      <%= form.text_field :project_name, class: 'form-control form-control-sm', required: true %>
+    </div>
+
+    <div class="col-lg-3 mb-3">
       <%= form.label :commcare_username, class: 'form-label form-label-sm' %>
       <%= form.text_field :commcare_username, class: 'form-control form-control-sm', required: true %>
     </div>
 
-    <div class="col-lg-4 mb-3">
+    <div class="col-lg-3 mb-3">
       <%= form.label :commcare_password, class: 'form-label form-label-sm' %>
       <%= form.password_field :commcare_password, class: 'form-control form-control-sm', required: !@destination.persisted? %>
       <% if @destination.persisted? %>

@@ -41,17 +41,22 @@ class DestinationsController < ApplicationController
     redirect_to destinations_url, notice: 'Destination was successfully deleted.'
   end
 
-  def add_source
+  def create_token
     @destination = Destination.find(params[:id])
-    @destination.destination_sources.create(destination_source_params)
-    redirect_to edit_destination_path(@destination)
+    @token = @destination.create_token  
+    if @token.persisted?
+      redirect_to destination_path(@destination), notice: 'Token was successfully created.'
+    else
+      Rails.logger.error("Token creation failed: #{@token.errors.full_messages.join(', ')}")
+      redirect_to destination_path(@destination), alert: "Failed to create token: #{@token.errors.full_messages.join(', ')}"
+    end
   end
 
-  def remove_source
+  def delete_token
     @destination = Destination.find(params[:id])
-    @source = @destination.destination_sources.find(params[:source_id])
-    @source.destroy
-    redirect_to edit_destination_path(@destination)
+    @token = @destination.destination_tokens.find(params[:token_id])
+    @token.destroy
+    redirect_to destination_path(@destination), notice: 'Token was successfully deleted.'
   end
 
   private
@@ -61,10 +66,7 @@ class DestinationsController < ApplicationController
   end
 
   def destination_params
-    params.require(:destination).permit(:name, :database_url, :commcare_username, :commcare_password, :commcare_password_confirmation)
+    params.require(:destination).permit(:name, :project_name, :database_url, :commcare_username, :commcare_password, :commcare_password_confirmation)
   end
 
-  def destination_source_params
-    params.require(:destination_source).permit(:name, :url, :key_column, :table_name)
-  end
 end

@@ -16,10 +16,10 @@
         <% @users.each do |user| %>
           <tr>
             <td><%= user.email %></td>
-            <td>
+            <td style="white-space: nowrap;">
               <%= link_to 'Show', user_path(user), class: 'btn btn-sm btn-outline-primary' %>
               <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-sm btn-outline-primary' %>
-              <%= link_to 'Delete', user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+              <%= link_to 'Delete', user_path(user), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this user?' }, class: 'btn btn-sm btn-outline-danger' %>
             </td>
           </tr>
         <% end %>

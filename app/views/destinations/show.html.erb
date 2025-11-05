@@ -2,7 +2,7 @@
       <h1><%= @destination.name %></h1>
       <div>
         <%= link_to 'Edit', edit_destination_path(@destination), class: 'btn btn-outline-primary' %>
-        <%= link_to 'Delete', destination_path(@destination), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger' %>
+        <%= link_to 'Delete', destination_path(@destination), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this destination?' }, class: 'btn btn-outline-danger' %>
         <%= link_to 'Back', destinations_path, class: 'btn btn-outline-secondary' %>
       </div>
     </div>
@@ -11,14 +11,68 @@
       <div class="card-body">
         <div class="row mb-3">
           <div class="col-md-6">
+            <h6 class="text-muted">Project Name</h6>
+            <p><%= @destination.project_name %></p>
+          </div>
+          <div class="col-md-6">
             <h6 class="text-muted">CommCare Username</h6>
             <p><%= @destination.commcare_username %></p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <h6 class="text-muted">Database URL</h6>
+            <p><code><%= @destination.database_url_for_display %></code></p>
           </div>
         </div>
       </div>
     </div>
 
-    <h3>Destination Sources</h3>
+    <h5 class="mt-5">API Tokens</h5>
+
+    <div class="alert alert-secondary mb-3">
+      <strong>How to use:</strong> Configure CommCare data forwarding with the following URL and authorization header:
+      <br><code><%= request.base_url %>/api/forwarding</code>
+      <br>Authorization: <code>Bearer &lt;token&gt;</code> or <code>&lt;token&gt;</code>
+    </div>
+
+    <% if @destination.destination_tokens.any? %>
+      <div class="table-responsive mb-3">
+        <table class="table table-sm table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Created</th>
+              <th>Last Accessed</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @destination.destination_tokens.each do |token| %>
+              <tr>
+                <td><code><%= token.token %></code></td>
+                <td><%= token.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                <td><%= token.last_accessed_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Never' %></td>
+                <td style="white-space: nowrap;">
+                  <%= button_to 'Delete', delete_token_destination_path(@destination, token_id: token.id), method: :post, data: { turbo_confirm: 'Are you sure you wish to delete this token?' }, class: 'btn btn-sm btn-outline-danger' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-muted">No tokens yet.</p>
+    <% end %>
+
+    <div class="mb-4">
+      <%= button_to 'Create Token', create_token_destination_path(@destination), method: :post, class: 'btn btn-outline-primary btn-sm' %>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="mt-5 mb-0">Destination Sources</h5>
+      <%= link_to 'Add Source', new_destination_destination_source_path(@destination), class: 'btn btn-outline-primary btn-sm' %>
+    </div>
 
     <% if @destination.destination_sources.any? %>
       <div class="table-responsive">
@@ -26,18 +80,27 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Case Type</th>
               <th>URL</th>
               <th>Key Column</th>
               <th>Table Name</th>
+              <th>Sensitive Fields</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <% @destination.destination_sources.each do |source| %>
               <tr>
                 <td><%= source.name %></td>
+                <td><%= source.case_type %></td>
                 <td><%= source.url %></td>
                 <td><%= source.key_column %></td>
                 <td><%= source.table_name %></td>
+                <td><small><%= source.sensitive_fields %></small></td>
+                <td style="white-space: nowrap;">
+                  <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
+                  <%= link_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-sm btn-outline-danger' %>
+                </td>
               </tr>
             <% end %>
           </tbody>

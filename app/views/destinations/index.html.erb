@@ -9,6 +9,7 @@
       <thead>
         <tr>
           <th>Name</th>
+          <th>Project Name</th>
           <th>CommCare Username</th>
           <th>Actions</th>
         </tr>
@@ -17,11 +18,12 @@
         <% @destinations.each do |destination| %>
           <tr>
             <td><%= destination.name %></td>
+            <td><%= destination.project_name %></td>
             <td><%= destination.commcare_username %></td>
-            <td>
+            <td style="white-space: nowrap;">
               <%= link_to 'Show', destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>
               <%= link_to 'Edit', edit_destination_path(destination), class: 'btn btn-sm btn-outline-primary' %>
-              <%= link_to 'Delete', destination_path(destination), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+              <%= link_to 'Delete', destination_path(destination), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this destination?' }, class: 'btn btn-sm btn-outline-danger' %>
             </td>
           </tr>
         <% end %>

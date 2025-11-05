@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Edit Destination Source</h1>
+  <div>
+    <%= link_to 'Delete', destination_destination_source_path(@destination, @destination_source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-outline-danger' %>
+  </div>
+</div>
+
+<%= link_to 'Back', destination_path(@destination), class: 'btn btn-outline-secondary mb-3' %>
+
+<%= render 'form' %>

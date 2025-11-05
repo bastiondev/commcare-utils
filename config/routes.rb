@@ -2,11 +2,19 @@ Rails.application.routes.draw do
   passwordless_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+  # Good Job console for logged in users
+  mount GoodJob::Engine => 'queue', constraints: UserConstraint.new
+
+  namespace :api do
+    post '/forwarding', to: 'data_forwarding#create'
+  end
+
   resources :destinations do
     member do
-      post :add_source, to: 'destinations#add_source'
-      post :remove_source, to: 'destinations#remove_source'
+      post :create_token, to: 'destinations#create_token'
+      post :delete_token, to: 'destinations#delete_token'
     end
+    resources :destination_sources
   end
 
   resources :users
