@@ -40,10 +40,18 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-lg-12 mb-3">
+
+    <div class="col-lg-9 mb-3">
       <%= form.label :url, class: 'form-label form-label-sm' %>
       <%= form.text_field :url, class: 'form-control form-control-sm' %>
       <small class="form-text text-muted">Optional. Only used for Excel Dashboard Integration, not data forwarding.</small>
+    </div>
+    <div class="col-lg-3 mb-3">
+      <%= form.label :scheduled_sync, 'Sync', class: 'form-label form-label-sm' %>
+      <div class="form-check">
+        <%= form.check_box :scheduled_sync, class: 'form-check-input' %>
+        <%= form.label :scheduled_sync, 'Enable daily sync', class: 'form-check-label' %>
+      </div>
     </div>
   </div>
 

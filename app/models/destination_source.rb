@@ -44,12 +44,6 @@ class DestinationSource < ApplicationRecord
     ensure_table properties_to_upsert.keys
     upsert_row properties_to_upsert.keys, properties_to_upsert.values, DateTime.now
   end
-  
-  private
-
-  def set_default_sensitive_fields
-    self.sensitive_fields ||= ENV['DEFAULT_SENSITIVE_FIELDS']
-  end
 
   def sync_source
     headers = nil
@@ -66,6 +60,12 @@ class DestinationSource < ApplicationRecord
     end
     delete_rows_updated_before start_time
     return num_rows
+  end
+  
+  private
+
+  def set_default_sensitive_fields
+    self.sensitive_fields ||= ENV['DEFAULT_SENSITIVE_FIELDS']
   end
 
 end

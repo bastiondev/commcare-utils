@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_05_162451) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_12_163700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_05_162451) do
     t.bigint "destination_id", null: false
     t.string "key_column", null: false
     t.string "name", null: false
+    t.boolean "scheduled_sync", default: false
     t.text "sensitive_fields"
     t.string "table_name", null: false
     t.datetime "updated_at", null: false

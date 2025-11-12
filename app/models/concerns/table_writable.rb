@@ -1,4 +1,6 @@
 require 'database_writer'
+require 'net/http'
+require 'json'
 
 module TableWritable
   extend ActiveSupport::Concern
@@ -56,7 +58,7 @@ module TableWritable
 
   # LAST_SYNC_COLUMN is set to time when inserted by sync, delete
   # any rows not synced
-  def delete_rows_updated_before table_name, time
+  def delete_rows_updated_before time
     writer.delete_before table_name, LAST_SYNC_COLUMN, time
   end
 
@@ -123,7 +125,7 @@ module TableWritable
         end
       }.new(block)
     )
-    auth_header = "ApiKey #{commcare_user}:#{commcare_key}"
+    auth_header = "ApiKey #{destination.commcare_username}:#{destination.commcare_password}"
     uri = URI url
 
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|

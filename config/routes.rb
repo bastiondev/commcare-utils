@@ -14,7 +14,11 @@ Rails.application.routes.draw do
       post :create_token, to: 'destinations#create_token'
       post :delete_token, to: 'destinations#delete_token'
     end
-    resources :destination_sources
+    resources :destination_sources do
+      member do
+        post :sync
+      end
+    end
   end
 
   resources :users

@@ -1,7 +1,7 @@
 class DestinationSourcesController < ApplicationController
   before_action :require_user!
   before_action :set_destination
-  before_action :set_destination_source, only: [:edit, :update, :destroy]
+  before_action :set_destination_source, only: [:edit, :update, :destroy, :sync]
 
   def new
     @destination_source = @destination.destination_sources.build
@@ -32,6 +32,11 @@ class DestinationSourcesController < ApplicationController
     redirect_to destination_path(@destination), notice: 'Destination source was successfully deleted.'
   end
 
+  def sync
+    SyncSourceJob.perform_later(@destination_source.id)
+    redirect_to destination_path(@destination), notice: 'Sync job has been enqueued for this destination source.'
+  end
+
   private
 
   def set_destination
@@ -43,6 +48,6 @@ class DestinationSourcesController < ApplicationController
   end
 
   def destination_source_params
-    params.require(:destination_source).permit(:name, :case_type, :url, :key_column, :table_name, :sensitive_fields)
+    params.require(:destination_source).permit(:name, :case_type, :url, :key_column, :table_name, :sensitive_fields, :scheduled_sync)
   end
 end

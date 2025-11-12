@@ -98,6 +98,7 @@
                 <td><%= source.table_name %></td>
                 <td><small><%= source.sensitive_fields %></small></td>
                 <td style="white-space: nowrap;">
+                  <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, data: { turbo_confirm: 'Are you sure you wish to enqueue a sync for this destination source?' }, class: 'btn btn-sm btn-outline-success', form: { style: 'display: inline-block;' } %>
                   <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
                   <%= link_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-sm btn-outline-danger' %>
                 </td>
