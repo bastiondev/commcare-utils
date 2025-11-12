@@ -16,17 +16,13 @@ module Api
 
     def authenticate_token!
       token = extract_token_from_header
-      
-      unless token
+      @destination_token = DestinationToken.authenticate(token)
+
+      unless @destination_token
         return render json: { error: 'Unauthorized' }, status: :unauthorized
       end
 
-      @destination_token = DestinationToken.find_by(token: token)
-      @destination = @destination_token&.destination
-
-      unless @destination
-        return render json: { error: 'Unauthorized' }, status: :unauthorized
-      end
+      @destination = @destination_token.destination
     end
 
     def extract_token_from_header
