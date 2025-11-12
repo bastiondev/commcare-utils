@@ -1,6 +1,6 @@
 module Api
   class DataForwardingController < ApplicationController
-    skip_before_action :require_user!
+    
     before_action :authenticate_token!
 
     def create
