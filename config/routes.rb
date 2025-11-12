@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   mount GoodJob::Engine => 'queue', constraints: UserConstraint.new
 
   namespace :api do
+    get '/forwarding', to: 'data_forwarding#index'
     post '/forwarding', to: 'data_forwarding#create'
   end
 

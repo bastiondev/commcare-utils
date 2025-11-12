@@ -3,6 +3,10 @@ module Api
     
     before_action :authenticate_token!
 
+    def index
+      render json: { status: 'OK' }, status: :ok
+    end
+
     def create
       DataForwardJob.perform_later(@destination_token.id, request.raw_post)
       render json: { status: 'received' }, status: :accepted
