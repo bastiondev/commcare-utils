@@ -28,87 +28,93 @@
       </div>
     </div>
 
-    <h5 class="mt-5">API Tokens</h5>
+    <div class="card mt-5">
+      <div class="card-header">
+        <h5 class="mb-0">API Tokens</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-secondary mb-3">
+          <strong>How to use:</strong> Configure CommCare data forwarding with the following URL and authorization header:
+          <br><code><%= request.base_url %>/api/forwarding</code>
+          <br>Authorization: <code>Bearer &lt;token&gt;</code> or <code>&lt;token&gt;</code>
+        </div>
 
-    <div class="alert alert-secondary mb-3">
-      <strong>How to use:</strong> Configure CommCare data forwarding with the following URL and authorization header:
-      <br><code><%= request.base_url %>/api/forwarding</code>
-      <br>Authorization: <code>Bearer &lt;token&gt;</code> or <code>&lt;token&gt;</code>
+        <% if @destination.destination_tokens.any? %>
+          <div class="table-responsive mb-3">
+            <table class="table table-sm table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Token</th>
+                  <th>Created</th>
+                  <th>Last Accessed</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @destination.destination_tokens.each do |token| %>
+                  <tr>
+                    <td><code><%= token.token %></code></td>
+                    <td><%= token.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                    <td><%= token.last_accessed_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Never' %></td>
+                    <td style="white-space: nowrap;">
+                      <%= button_to 'Delete', delete_token_destination_path(@destination, token_id: token.id), method: :post, data: { turbo_confirm: 'Are you sure you wish to delete this token?' }, class: 'btn btn-sm btn-outline-danger' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <p class="text-muted">No tokens yet.</p>
+        <% end %>
+
+        <div>
+          <%= button_to 'Create Token', create_token_destination_path(@destination), method: :post, class: 'btn btn-outline-primary btn-sm' %>
+        </div>
+      </div>
     </div>
 
-    <% if @destination.destination_tokens.any? %>
-      <div class="table-responsive mb-3">
-        <table class="table table-sm table-striped table-bordered">
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Created</th>
-              <th>Last Accessed</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @destination.destination_tokens.each do |token| %>
-              <tr>
-                <td><code><%= token.token %></code></td>
-                <td><%= token.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-                <td><%= token.last_accessed_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Never' %></td>
-                <td style="white-space: nowrap;">
-                  <%= button_to 'Delete', delete_token_destination_path(@destination, token_id: token.id), method: :post, data: { turbo_confirm: 'Are you sure you wish to delete this token?' }, class: 'btn btn-sm btn-outline-danger' %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+    <div class="card mt-5">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Destination Sources</h5>
+        <%= link_to 'Add Source', new_destination_destination_source_path(@destination), class: 'btn btn-outline-primary btn-sm' %>
       </div>
-    <% else %>
-      <p class="text-muted">No tokens yet.</p>
-    <% end %>
-
-    <div class="mb-4">
-      <%= button_to 'Create Token', create_token_destination_path(@destination), method: :post, class: 'btn btn-outline-primary btn-sm' %>
+      <div class="card-body">
+        <% if @destination.destination_sources.any? %>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Case Type</th>
+                  <th>Key Column</th>
+                  <th>Table Name</th>
+                  <th>Sensitive Fields</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @destination.destination_sources.each do |source| %>
+                  <tr>
+                    <td><%= source.name %></td>
+                    <td><%= source.case_type %></td>
+                    <td><%= source.key_column %></td>
+                    <td><%= source.table_name %></td>
+                    <td><small><%= source.sensitive_fields %></small></td>
+                    <td style="white-space: nowrap;">
+                      <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, data: { turbo_confirm: 'Are you sure you wish to enqueue a sync for this destination source?' }, class: 'btn btn-sm btn-outline-success', form: { style: 'display: inline-block;' } %>
+                      <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
+                      <%= link_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-sm btn-outline-danger' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            No destination sources configured.
+          </div>
+        <% end %>
+      </div>
     </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h5 class="mt-5 mb-0">Destination Sources</h5>
-      <%= link_to 'Add Source', new_destination_destination_source_path(@destination), class: 'btn btn-outline-primary btn-sm' %>
-    </div>
-
-    <% if @destination.destination_sources.any? %>
-      <div class="table-responsive">
-        <table class="table table-sm table-striped table-bordered">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Case Type</th>
-              <th>URL</th>
-              <th>Key Column</th>
-              <th>Table Name</th>
-              <th>Sensitive Fields</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @destination.destination_sources.each do |source| %>
-              <tr>
-                <td><%= source.name %></td>
-                <td><%= source.case_type %></td>
-                <td><%= source.url %></td>
-                <td><%= source.key_column %></td>
-                <td><%= source.table_name %></td>
-                <td><small><%= source.sensitive_fields %></small></td>
-                <td style="white-space: nowrap;">
-                  <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, data: { turbo_confirm: 'Are you sure you wish to enqueue a sync for this destination source?' }, class: 'btn btn-sm btn-outline-success', form: { style: 'display: inline-block;' } %>
-                  <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
-                  <%= link_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-sm btn-outline-danger' %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% else %>
-      <div class="alert alert-info">
-        No destination sources configured.
-      </div>
-    <% end %>
