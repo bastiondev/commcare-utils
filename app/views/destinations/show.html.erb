@@ -90,6 +90,7 @@
                   <th>Key Column</th>
                   <th>Table Name</th>
                   <th>Sensitive Fields</th>
+                  <th>Daily Sync?</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -101,6 +102,7 @@
                     <td><%= source.key_column %></td>
                     <td><%= source.table_name %></td>
                     <td><small><%= source.sensitive_fields %></small></td>
+                    <td><%= source.scheduled_sync ? 'Yes' : 'No' %></td>
                     <td style="white-space: nowrap;">
                       <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, data: { turbo_confirm: 'Are you sure you wish to enqueue a sync for this destination source?' }, class: 'btn btn-sm btn-outline-success', form: { style: 'display: inline-block;' } %>
                       <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
