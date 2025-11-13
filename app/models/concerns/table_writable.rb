@@ -8,7 +8,7 @@ module TableWritable
   NULL_PATTERN = /---/
   LAST_SYNC_COLUMN = '_last_commcare_sync'
 
-  def ensure_table _columns
+  def ensure_table _columns, drop_columns = false
     # Add the last_sync column
     columns = _columns + [LAST_SYNC_COLUMN]
 
@@ -24,7 +24,9 @@ module TableWritable
       columns_to_add = columns.reject{|c| current_columns.include?(c)}
       columns_to_remove = current_columns.select{|c| !columns.include?(c)}
       columns_to_add.each {|col| writer.add_column(table_name, col) }
-      columns_to_remove.each {|col| writer.drop_column(table_name, col) }
+      if drop_columns
+        columns_to_remove.each {|col| writer.drop_column(table_name, col) }
+      end
     end
 
     # Ensure unique constraint exists on key column, named "commcare_key_constraint"

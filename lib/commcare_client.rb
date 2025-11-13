@@ -10,7 +10,15 @@ class CommcareClient
   end
 
   def get_case(case_id)
-    execute_get("https://www.commcarehq.org/a/#{@project_name}/api/case/v2/#{case_id}")
+    execute_get("https://www.commcarehq.org/a/#{@project_name}/api/case/v1/#{case_id}/")
+  end
+
+  def get_user(user_id)
+    execute_get("https://www.commcarehq.org/a/#{@project_name}/api/user/v1/#{user_id}/")
+  end
+
+  def get_location(location_id)
+    execute_get("https://www.commcarehq.org/a/#{@project_name}/api/location/v1/#{location_id}/")
   end
 
   private 

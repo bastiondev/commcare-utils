@@ -18,9 +18,20 @@ class Destination < ApplicationRecord
 
   def handle_forwarded_case case_id
     case_data = commcare_client.get_case(case_id)
-    source = destination_sources.where('lower(trim(case_type)) = ?', case_data['case_type'].downcase.strip).first
+    source = destination_sources.where('lower(trim(case_type)) = ?', case_data['properties']['case_type'].downcase.strip).first
+    # Get owner data if present
+    if case_data['properties'] && case_data['properties']['owner_id'].present?
+      owner_location = commcare_client.get_location(case_data['properties']['owner_id'])
+    end
+    # Get user data if present
+    if case_data['opened_by'].present?
+      opened_by_user = commcare_client.get_user(case_data['opened_by'])
+    end
+    if case_data['closed_by'].present?
+      closed_by_user = commcare_client.get_user(case_data['closed_by'])
+    end
     if source
-      source.sync_case case_data
+      source.sync_case case_data, owner_location, opened_by_user, closed_by_user
     else
       raise "Case type not found: #{case_data['case_type']} for case id: #{case_id}"
     end
