@@ -14,21 +14,25 @@
     <div class="col-lg-3 mb-3">
       <%= form.label :name, class: 'form-label form-label-sm' %>
       <%= form.text_field :name, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Friendly name for this data source (e.g. "Surgery Sessions")</small>
     </div>
 
     <div class="col-lg-3 mb-3">
       <%= form.label :case_type, class: 'form-label form-label-sm' %>
       <%= form.text_field :case_type, class: 'form-control form-control-sm' %>
+      <small class="form-text text-muted">Name of Case Type (e.g. "Patient", "Surgery_Session")</small>
     </div>
 
     <div class="col-lg-3 mb-3">
       <%= form.label :key_column, class: 'form-label form-label-sm' %>
       <%= form.text_field :key_column, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Name of the column that uniquely identifies each record (e.g. "caseid")</small>
     </div>
 
     <div class="col-lg-3 mb-3">
       <%= form.label :table_name, class: 'form-label form-label-sm' %>
       <%= form.text_field :table_name, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Database table name for this data source</small>
     </div>
   </div>
 

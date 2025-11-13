@@ -14,23 +14,26 @@
     <div class="col-lg-3 mb-3">
       <%= form.label :name, class: 'form-label form-label-sm' %>
       <%= form.text_field :name, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">A friendly name for this destination (e.g., "TT Tracker")</small>
     </div>
 
     <div class="col-lg-3 mb-3">
       <%= form.label :project_name, class: 'form-label form-label-sm' %>
-      <%= form.text_field :project_name, class: 'form-control form-control-sm', required: true %>
+        <%= form.text_field :project_name, class: 'form-control form-control-sm', required: true %>
+        <small class="form-text text-muted">The name of your CommCare project in the CommCare URL (e.g., "tt-tracker")</small>
     </div>
 
     <div class="col-lg-3 mb-3">
       <%= form.label :commcare_username, class: 'form-label form-label-sm' %>
       <%= form.text_field :commcare_username, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">The username for your CommCare account</small>
     </div>
 
     <div class="col-lg-3 mb-3">
-      <%= form.label :commcare_password, class: 'form-label form-label-sm' %>
+      <%= form.label 'API Key / password', class: 'form-label form-label-sm' %>
       <%= form.password_field :commcare_password, class: 'form-control form-control-sm', required: !@destination.persisted? %>
       <% if @destination.persisted? %>
-        <small class="form-text text-muted">Only enter a new password if you want to change it.</small>
+        <small class="form-text text-muted">Only enter a new key/password if you want to change it.</small>
       <% end %>
     </div>
   </div>

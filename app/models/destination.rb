@@ -18,7 +18,6 @@ class Destination < ApplicationRecord
 
   def handle_forwarded_case case_id
     case_data = commcare_client.get_case(case_id)
-    puts case_data
     source = destination_sources.where('lower(trim(case_type)) = ?', case_data['case_type'].downcase.strip).first
     if source
       source.sync_case case_data

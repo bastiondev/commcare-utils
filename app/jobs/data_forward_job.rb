@@ -42,7 +42,7 @@ class DataForwardJob < ApplicationJob
 
     parsed_payload = parse_payload(payload)
     
-    puts parsed_payload
+    destination.handle_forwarded_case(parsed_payload[:case_id])
   end
 
   # Extract the payload into case_name and case_id
