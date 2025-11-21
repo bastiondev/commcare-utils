@@ -87,7 +87,7 @@ class DestinationSource < ApplicationRecord
       end
     end
     if num_rows > 0
-      Rails.logger.info "Synced #{num_rows} rows from source #{id}"
+      Rails.logger.info "Synced #{num_rows} rows from destination source #{id}"
       delete_rows_updated_before start_time
     end
     return num_rows
