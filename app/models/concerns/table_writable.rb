@@ -140,6 +140,12 @@ module TableWritable
       #   end
       # end
     end
+    
+    # Check for HTTP success before parsing
+    unless response.is_a?(Net::HTTPSuccess)
+      raise Net::HTTPClientException.new(response.message, response)
+    end
+    
     string_io = StringIO.new(response.body)
     until string_io.eof?
       parser <<  string_io.read(3000)
