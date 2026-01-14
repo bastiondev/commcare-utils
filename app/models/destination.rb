@@ -8,6 +8,7 @@ class Destination < ApplicationRecord
   validates :name, presence: true
   validates :project_name, presence: true
   validates :database_url, presence: true
+  validate :database_url_is_valid_uri
   validates :commcare_username, presence: true
   validates :commcare_password, presence: true
 
@@ -44,8 +45,23 @@ class Destination < ApplicationRecord
   # Returns database_url with the password masked
   def database_url_for_display
     # Parse database_url into components and then only display the host, port, and path
-    uri = URI.parse(database_url)
-    "postgres://#{uri.host}:#{uri.port}#{uri.path}"
+    begin
+      uri = URI.parse(database_url)
+      "postgres://#{uri.host}:#{uri.port}#{uri.path}"
+    rescue URI::InvalidURIError
+      "Invalid database URL"
+    end
+  end
+
+  private
+
+  def database_url_is_valid_uri
+    return if database_url.blank?
+    begin
+      URI.parse(database_url)
+    rescue URI::InvalidURIError
+      errors.add(:database_url, "must be a valid URI")
+    end
   end
 
 end
