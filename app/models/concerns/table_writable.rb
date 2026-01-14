@@ -132,11 +132,11 @@ module TableWritable
     request['Authorization'] = "ApiKey #{destination.commcare_username}:#{destination.commcare_password}"
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       http.request(request)
-      http.request request do |response|
-        response.read_body do |chunk|
-          parser << chunk
-        end
-      end
+      # http.request request do |response|
+      #   response.read_body do |chunk|
+      #     parser << chunk
+      #   end
+      # end
     end
     
     # Check for HTTP success before parsing
