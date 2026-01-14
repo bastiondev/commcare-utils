@@ -53,6 +53,15 @@ class Destination < ApplicationRecord
     end
   end
 
+  def database_url_for_connection
+    # Add 'sslmode=require' to the database_url, appending to existing query string if 
+    # present and replacing if sslmode is already present
+    uri = URI.parse(database_url)
+    uri.query = "#{uri.query}&sslmode=require" if uri.query.present?
+    uri.query = "sslmode=require" if uri.query.blank?
+    uri.to_s
+  end
+
   private
 
   def database_url_is_valid_uri

@@ -65,7 +65,7 @@ module TableWritable
   end
 
   def writer
-    @database_writer ||= DatabaseWriter.new(destination.database_url)
+    @database_writer ||= DatabaseWriter.new(destination.database_url_for_connection)
   end
 
   def finish_writer
