@@ -19,6 +19,8 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "openssl", "~> 3.3.2"
+
 # Bootstrap and SASS
 gem "dartsass-rails"
 gem "bootstrap", "~> 5.3"

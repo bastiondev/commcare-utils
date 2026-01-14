@@ -127,18 +127,16 @@ module TableWritable
         end
       }.new(block)
     )
-    auth_header = "ApiKey #{destination.commcare_username}:#{destination.commcare_password}"
     uri = URI url
-
+    request = Net::HTTP::Get.new uri
+    request['Authorization'] = "ApiKey #{destination.commcare_username}:#{destination.commcare_password}"
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-      request = Net::HTTP::Get.new uri
-      request['Authorization'] = auth_header
       http.request(request)
-      # http.request request do |response|
-      #   response.read_body do |chunk|
-      #     parser << chunk
-      #   end
-      # end
+      http.request request do |response|
+        response.read_body do |chunk|
+          parser << chunk
+        end
+      end
     end
     
     # Check for HTTP success before parsing
