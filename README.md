@@ -239,6 +239,16 @@ HTTP client for CommCare HQ API.
 - Parameterized SQL queries
 - HTTP success validation before parsing
 
+## Payload Parsing:
+
+### Case
+
+TODO: Document case payload parsing
+
+### Form
+
+
+
 ## Tech Stack
 
 - **Framework**: Rails 8.1
