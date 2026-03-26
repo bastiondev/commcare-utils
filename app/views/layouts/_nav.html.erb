@@ -6,7 +6,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <% if current_user %>
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <%= link_to 'Destinations', destinations_path, class: 'nav-link' %>
           </li>
@@ -15,6 +15,18 @@
           </li>
           <li class="nav-item">
             <%= link_to 'Queue', '/queue', class: 'nav-link', target: '_blank' %>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <%= button_to 'Log out', users_sign_out_path, method: :delete, class: 'dropdown-item' %>
+              </li>
+            </ul>
           </li>
         </ul>
       <% end %>
