@@ -5,17 +5,19 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <%= link_to 'Destinations', destinations_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Users', users_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Queue', '/queue', class: 'nav-link', target: '_blank' %>
-        </li>
-      </ul>
+      <% if current_user %>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <%= link_to 'Destinations', destinations_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Users', users_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Queue', '/queue', class: 'nav-link', target: '_blank' %>
+          </li>
+        </ul>
+      <% end %>
     </div>
   </div>
 </nav>
