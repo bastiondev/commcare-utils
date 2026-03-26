@@ -1,5 +1,5 @@
 # Example Case payload formats:
-# XML: 
+# XML:
 # <case case_id="b0916685-7247-4c44-b712-633d3d64e0c0"
 #     date_modified="2015-04-17T16:04:54.950000Z"
 #     user_id="d0e472a6b36dfd3ee5059222e12b8c1b"
@@ -10,8 +10,8 @@
 #     <owner_id>d0e472a6b36dfd3ee5059222e12b8c1b</owner_id>
 #   </create>
 # </case>
-# JSON:
-#  { "case_id" : "b0916685-7247-4c44-b712-633d3d64e0c0",    
+# JSON (case):
+#  { "case_id" : "b0916685-7247-4c44-b712-633d3d64e0c0",
 #     "closed" : false,
 #     "date_closed" : null,
 #     "date_modified" : "2015-04-17T16:04:54.950000Z",
@@ -29,6 +29,8 @@
 #     "version" : "2.0",
 #     "xform_ids" : [ "3HQEXR2S0GIRFY2GF40HAR7ZE" ]
 #   }
+# JSON (form):
+#  { "app_id": "...", "form": { "@name": "Form Name", "meta": {...}, ... }, "id": "..." }
 
 class DataForwardJob < ApplicationJob
   queue_as :default
@@ -41,21 +43,20 @@ class DataForwardJob < ApplicationJob
     destination_token.update(last_accessed_at: Time.current)
 
     parsed_payload = parse_payload(payload)
-    
-    destination.handle_forwarded_case(parsed_payload[:case_id])
+
+    if form_payload?(parsed_payload)
+      destination.handle_forwarded_form(parsed_payload)
+    else
+      destination.handle_forwarded_case(parsed_payload[:case_id])
+    end
   end
 
-  # Extract the payload into case_name and case_id
-  # Payload is either and XML or JSON string
-  # Return hash:
-  # {
-  #   case_name: "Trees",
-  #   case_id: "b0916685-7247-4c44-b712-633d3d64e0c0"
-  # }
+  # Parse payload from string into structured data.
+  # Returns either a full Hash (form payload) or a symbol-keyed hash (case payload).
   def parse_payload(payload)
     payload_str = payload.is_a?(String) ? payload : payload.to_s
     stripped = payload_str.strip
-    
+
     # Detect format by checking first non-whitespace character
     if stripped.start_with?('{', '[')
       parse_json(stripped)
@@ -68,8 +69,21 @@ class DataForwardJob < ApplicationJob
 
   private
 
+  # Form payloads have a top-level 'form' key with '@name' (from CommCare's XML-to-JSON).
+  # Case payloads have 'case_id' and 'properties' instead.
+  def form_payload?(parsed)
+    parsed.is_a?(Hash) && parsed.key?('form') && parsed.dig('form', '@name').present?
+  end
+
   def parse_json(json_str)
     data = JSON.parse(json_str)
+
+    # Form payload: return the full parsed hash
+    if data.is_a?(Hash) && data.key?('form') && data.dig('form', '@name').present?
+      return data
+    end
+
+    # Case payload: extract case fields
     {
       case_name: data.dig('properties', 'case_name'),
       case_id: data['case_id']
@@ -81,7 +95,7 @@ class DataForwardJob < ApplicationJob
   def parse_xml(xml_str)
     doc = Nokogiri::XML(xml_str)
     case_element = doc.root
-    
+
     {
       case_name: case_element.xpath('.//case_name').first&.text,
       case_id: case_element.attr('case_id')
@@ -89,5 +103,5 @@ class DataForwardJob < ApplicationJob
   rescue => e
     raise "Failed to parse XML: #{e.message}"
   end
-  
+
 end

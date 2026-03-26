@@ -1,0 +1,37 @@
+<%= form_with(model: [@destination, @form_mapping, @form_mapping_table], local: true) do |form| %>
+  <% if @form_mapping_table.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@form_mapping_table.errors.count, "error") %> prohibited this table mapping from being saved:</h4>
+      <ul class="mb-0">
+        <% @form_mapping_table.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-lg-4 mb-3">
+      <%= form.label :table_name, class: 'form-label form-label-sm' %>
+      <%= form.text_field :table_name, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Database table name (e.g. "eec_oncho_households")</small>
+    </div>
+
+    <div class="col-lg-4 mb-3">
+      <%= form.label :json_path, 'JSON Path', class: 'form-label form-label-sm' %>
+      <%= form.text_field :json_path, class: 'form-control form-control-sm', required: true, value: @form_mapping_table.json_path || '.' %>
+      <small class="form-text text-muted">Path in form JSON: "." for root, or dot-separated path for nested data (e.g. "consent_survey.oncho_fl.group_indv_ovlf")</small>
+    </div>
+
+    <div class="col-lg-4 mb-3">
+      <%= form.label :sensitive_fields, class: 'form-label form-label-sm' %>
+      <%= form.text_area :sensitive_fields, class: 'form-control form-control-sm', rows: 2, placeholder: 'Comma-separated list of sensitive fields' %>
+      <small class="form-text text-muted">Fields to one-way hash for privacy protection</small>
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+    <%= form.submit class: 'btn btn-outline-primary' %>
+    <%= link_to 'Cancel', destination_path(@destination), class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>

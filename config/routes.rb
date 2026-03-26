@@ -20,6 +20,9 @@ Rails.application.routes.draw do
         post :sync
       end
     end
+    resources :form_mappings, only: [:new, :create, :edit, :update, :destroy] do
+      resources :form_mapping_tables, only: [:new, :create, :edit, :update, :destroy]
+    end
   end
 
   resources :users

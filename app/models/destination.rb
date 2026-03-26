@@ -1,6 +1,7 @@
 class Destination < ApplicationRecord
   has_many :destination_sources, dependent: :destroy
   has_many :destination_tokens, dependent: :destroy
+  has_many :form_mappings, dependent: :destroy
 
   encrypts :database_url
   encrypts :commcare_password
@@ -36,6 +37,16 @@ class Destination < ApplicationRecord
     else
       raise "Case type not found: #{case_data['case_type']} for case id: #{case_id}"
     end
+  end
+
+  def handle_forwarded_form(form_payload)
+    form_name = form_payload.dig('form', '@name')
+    raise "Form payload missing form.@name" unless form_name.present?
+
+    form_mapping = form_mappings.includes(:form_mapping_tables).detect { |fm| fm.matches_form_name?(form_name) }
+    raise "No form mapping found for form name: '#{form_name}' in destination #{id}" unless form_mapping
+
+    FormFlattener.new(form_payload, form_mapping).process!
   end
 
   def commcare_client

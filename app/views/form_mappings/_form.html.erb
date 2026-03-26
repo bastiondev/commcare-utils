@@ -1,0 +1,31 @@
+<%= form_with(model: [@destination, @form_mapping], local: true) do |form| %>
+  <% if @form_mapping.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(@form_mapping.errors.count, "error") %> prohibited this form mapping from being saved:</h4>
+      <ul class="mb-0">
+        <% @form_mapping.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-lg-4 mb-3">
+      <%= form.label :name, class: 'form-label form-label-sm' %>
+      <%= form.text_field :name, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Friendly name for this form mapping (e.g. "EEC Oncho December 2025")</small>
+    </div>
+
+    <div class="col-lg-8 mb-3">
+      <%= form.label :form_names, 'Form Names', class: 'form-label form-label-sm' %>
+      <%= form.text_field :form_names, class: 'form-control form-control-sm', required: true %>
+      <small class="form-text text-muted">Comma-separated list of CommCare form names to match (e.g. "EEC - Oncho/FL - D&eacute;cembre 2025, CES - SCH/STH - Novembre 2025")</small>
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+    <%= form.submit class: 'btn btn-outline-primary' %>
+    <%= link_to 'Cancel', destination_path(@destination), class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>

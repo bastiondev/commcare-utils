@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_12_163700) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_25_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,27 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_12_163700) do
     t.string "name", null: false
     t.string "project_name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "form_mapping_tables", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "form_mapping_id", null: false
+    t.string "json_path", default: ".", null: false
+    t.text "sensitive_fields"
+    t.string "table_name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["form_mapping_id", "table_name"], name: "index_form_mapping_tables_on_form_mapping_id_and_table_name", unique: true
+    t.index ["form_mapping_id"], name: "index_form_mapping_tables_on_form_mapping_id"
+  end
+
+  create_table "form_mappings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "destination_id", null: false
+    t.text "form_names", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["destination_id", "name"], name: "index_form_mappings_on_destination_id_and_name", unique: true
+    t.index ["destination_id"], name: "index_form_mappings_on_destination_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -162,4 +183,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_12_163700) do
 
   add_foreign_key "destination_sources", "destinations"
   add_foreign_key "destination_tokens", "destinations"
+  add_foreign_key "form_mapping_tables", "form_mappings"
+  add_foreign_key "form_mappings", "destinations"
 end
