@@ -14,13 +14,13 @@
     <div class="col-lg-4 mb-3">
       <%= form.label :table_name, class: 'form-label form-label-sm' %>
       <%= form.text_field :table_name, class: 'form-control form-control-sm', required: true %>
-      <small class="form-text text-muted">Database table name (e.g. "eec_oncho_households")</small>
+      <small class="form-text text-muted">Database table name (e.g. "households")</small>
     </div>
 
     <div class="col-lg-4 mb-3">
       <%= form.label :json_path, 'JSON Path', class: 'form-label form-label-sm' %>
       <%= form.text_field :json_path, class: 'form-control form-control-sm', required: true, value: @form_mapping_table.json_path || '.' %>
-      <small class="form-text text-muted">Path in form JSON: "." for root, or dot-separated path for nested data (e.g. "consent_survey.oncho_fl.group_indv_ovlf")</small>
+      <small class="form-text text-muted">Path in form JSON: "." for root, or dot-separated path for nested data (e.g. "consent_survey.household.individual_group")</small>
     </div>
 
     <div class="col-lg-4 mb-3">
