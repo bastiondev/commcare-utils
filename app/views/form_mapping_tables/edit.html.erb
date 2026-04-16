@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1>Edit Table Mapping</h1>
   <div>
-    <%= link_to 'Delete', destination_form_mapping_form_mapping_table_path(@destination, @form_mapping, @form_mapping_table), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-outline-danger' %>
+    <%= button_to 'Delete', destination_form_mapping_form_mapping_table_path(@destination, @form_mapping, @form_mapping_table), method: :delete, form: { onsubmit: "return confirm('Are you sure you wish to delete this table mapping?')", style: 'display: inline-block;' }, class: 'btn btn-outline-danger' %>
   </div>
 </div>
 

@@ -2,7 +2,7 @@
       <h1><%= @destination.name %></h1>
       <div>
         <%= link_to 'Edit', edit_destination_path(@destination), class: 'btn btn-outline-primary' %>
-        <%= link_to 'Delete', destination_path(@destination), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this destination?' }, class: 'btn btn-outline-danger' %>
+        <%= button_to 'Delete', destination_path(@destination), method: :delete, form: { onsubmit: "return confirm('Are you sure you wish to delete this destination?')", style: 'display: inline-block;' }, class: 'btn btn-outline-danger' %>
         <%= link_to 'Back', destinations_path, class: 'btn btn-outline-secondary' %>
       </div>
     </div>
@@ -57,7 +57,7 @@
                     <td><%= token.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
                     <td><%= token.last_accessed_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Never' %></td>
                     <td style="white-space: nowrap;">
-                      <%= button_to 'Delete', delete_token_destination_path(@destination, token_id: token.id), method: :post, data: { turbo_confirm: 'Are you sure you wish to delete this token?' }, class: 'btn btn-sm btn-outline-danger' %>
+                      <%= button_to 'Delete', delete_token_destination_path(@destination, token_id: token.id), method: :post, form: { onsubmit: "return confirm('Are you sure you wish to delete this token?')" }, class: 'btn btn-sm btn-outline-danger' %>
                     </td>
                   </tr>
                 <% end %>
@@ -104,9 +104,9 @@
                     <td><small><%= source.sensitive_fields %></small></td>
                     <td><%= source.scheduled_sync ? 'Yes' : 'No' %></td>
                     <td style="white-space: nowrap;">
-                      <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, data: { turbo_confirm: 'Are you sure you wish to enqueue a sync for this destination source?' }, class: 'btn btn-sm btn-outline-success', form: { style: 'display: inline-block;' } %>
+                      <%= button_to 'Sync', sync_destination_destination_source_path(@destination, source), method: :post, form: { onsubmit: "return confirm('Are you sure you wish to enqueue a sync for this destination source?')", style: 'display: inline-block;' }, class: 'btn btn-sm btn-outline-success' %>
                       <%= link_to 'Edit', edit_destination_destination_source_path(@destination, source), class: 'btn btn-sm btn-outline-primary' %>
-                      <%= link_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this source?' }, class: 'btn btn-sm btn-outline-danger' %>
+                      <%= button_to 'Delete', destination_destination_source_path(@destination, source), method: :delete, form: { onsubmit: "return confirm('Are you sure you wish to delete this source?')", style: 'display: inline-block;' }, class: 'btn btn-sm btn-outline-danger' %>
                     </td>
                   </tr>
                 <% end %>
@@ -138,7 +138,7 @@
                 <div style="white-space: nowrap;">
                   <%= link_to 'Add Table', new_destination_form_mapping_form_mapping_table_path(@destination, mapping), class: 'btn btn-sm btn-outline-success' %>
                   <%= link_to 'Edit', edit_destination_form_mapping_path(@destination, mapping), class: 'btn btn-sm btn-outline-primary' %>
-                  <%= link_to 'Delete', destination_form_mapping_path(@destination, mapping), method: :delete, data: { turbo_confirm: 'Are you sure you wish to delete this form mapping and all its table mappings?' }, class: 'btn btn-sm btn-outline-danger' %>
+                  <%= button_to 'Delete', destination_form_mapping_path(@destination, mapping), method: :delete, form: { onsubmit: "return confirm('Are you sure you wish to delete this form mapping and all its table mappings?')", style: 'display: inline-block;' }, class: 'btn btn-sm btn-outline-danger' %>
                 </div>
               </div>
               <div class="card-body p-0">
@@ -161,7 +161,7 @@
                             <td><small><%= fmt.sensitive_fields %></small></td>
                             <td style="white-space: nowrap;">
                               <%= link_to 'Edit', edit_destination_form_mapping_form_mapping_table_path(@destination, mapping, fmt), class: 'btn btn-sm btn-outline-primary' %>
-                              <%= link_to 'Delete', destination_form_mapping_form_mapping_table_path(@destination, mapping, fmt), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+                              <%= button_to 'Delete', destination_form_mapping_form_mapping_table_path(@destination, mapping, fmt), method: :delete, form: { onsubmit: "return confirm('Are you sure you wish to delete this table mapping?')", style: 'display: inline-block;' }, class: 'btn btn-sm btn-outline-danger' %>
                             </td>
                           </tr>
                         <% end %>
