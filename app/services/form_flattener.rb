@@ -18,13 +18,15 @@ class FormFlattener
       next if data_at_path.nil?
 
       sensitive_list = parse_sensitive_fields(fmt)
-
-      if data_at_path.is_a?(Array)
-        process_repeat_group(fmt, data_at_path, sensitive_list)
-      elsif data_at_path.is_a?(Hash)
-        process_single_object(fmt, data_at_path, sensitive_list)
+      
+      if fmt.is_array
+        if data_at_path.is_a?(Array)
+          process_repeat_group(fmt, data_at_path, sensitive_list)
+        elsif data_at_path.is_a?(Hash)
+          process_repeat_group(fmt, [data_at_path], sensitive_list)
+        end
       else
-        Rails.logger.warn "FormFlattener: path '#{fmt.json_path}' resolved to a non-object/array value, skipping"
+        process_single_object(fmt, data_at_path, sensitive_list)
       end
     end
   end

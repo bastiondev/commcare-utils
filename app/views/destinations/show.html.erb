@@ -149,6 +149,7 @@
                         <tr>
                           <th>Table Name</th>
                           <th>JSON Path</th>
+                          <th>Is Array</th>
                           <th>Sensitive Fields</th>
                           <th>Actions</th>
                         </tr>
@@ -158,6 +159,7 @@
                           <tr>
                             <td><code><%= fmt.table_name %></code></td>
                             <td><code><%= fmt.json_path %></code></td>
+                            <td><%= fmt.is_array? ? 'Yes' : 'No' %></td>
                             <td><small><%= fmt.sensitive_fields %></small></td>
                             <td style="white-space: nowrap;">
                               <%= link_to 'Edit', edit_destination_form_mapping_form_mapping_table_path(@destination, mapping, fmt), class: 'btn btn-sm btn-outline-primary' %>

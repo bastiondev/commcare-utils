@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="row">
-    <div class="col-lg-4 mb-3">
+    <div class="col-lg-3 mb-3">
       <%= form.label :table_name, class: 'form-label form-label-sm' %>
       <%= form.text_field :table_name, class: 'form-control form-control-sm', required: true %>
       <small class="form-text text-muted">Database table name (e.g. "households")</small>
@@ -23,7 +23,16 @@
       <small class="form-text text-muted">Path in form JSON: "." for root, or dot-separated path for nested data (e.g. "consent_survey.household.individual_group")</small>
     </div>
 
-    <div class="col-lg-4 mb-3">
+    <div class="col-lg-2 mb-3">
+      <%= form.label :is_array, class: 'form-label form-label-sm' %>
+      <div class="form-check">
+        <%= form.check_box :is_array, class: 'form-check-input' %>
+        <%= form.label :is_array, 'Array', class: 'form-check-label' %>
+      </div>
+      <small class="form-text text-muted">Path resolves to repeat rows</small>
+    </div>
+
+    <div class="col-lg-3 mb-3">
       <%= form.label :sensitive_fields, class: 'form-label form-label-sm' %>
       <%= form.text_area :sensitive_fields, class: 'form-control form-control-sm', rows: 2, placeholder: 'Comma-separated list of sensitive fields' %>
       <small class="form-text text-muted">Fields to one-way hash for privacy protection</small>

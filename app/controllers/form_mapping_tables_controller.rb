@@ -48,6 +48,6 @@ class FormMappingTablesController < ApplicationController
   end
 
   def form_mapping_table_params
-    params.require(:form_mapping_table).permit(:table_name, :json_path, :sensitive_fields)
+    params.require(:form_mapping_table).permit(:table_name, :json_path, :is_array, :sensitive_fields)
   end
 end
