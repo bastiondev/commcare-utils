@@ -108,6 +108,8 @@ class FormFlattener
     apply_sensitive_hashing!(flat, sensitive_list)
 
     columns = flat.keys
+    Rails.logger.info("Columns: #{columns}")
+    Rails.logger.info("Values: #{flat.values}")
     fmt.ensure_table(columns)
     fmt.upsert_row(columns, flat.values, DateTime.now)
   end
