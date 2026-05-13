@@ -14,7 +14,7 @@ module TableWritable
 
     # If table_name doesn't exist, create it.
     unless writer.exists?(table_name)
-      writer.create table_name, columns
+      writer.create table_name, columns, key_column
 
     # Go through columns and add to table as text (or type if in types) 
     # if don't exist, or alter to type if needed (and can) from types
@@ -28,9 +28,6 @@ module TableWritable
         columns_to_remove.each {|col| writer.drop_column(table_name, col) }
       end
     end
-
-    # Ensure unique constraint exists on key column, named "commcare_key_constraint"
-    writer.set_primary_key table_name, key_column
   end
 
   def upsert_row _columns, _values, time

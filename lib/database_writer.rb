@@ -24,16 +24,12 @@ class DatabaseWriter
     @conn.close
   end
 
-  def create table_name, columns
+  def create table_name, columns, primary_key
     query = %(CREATE TABLE IF NOT EXISTS "#{table_name}" \()
     query << columns.map{|col| "\"#{col}\" text" }.join(", ")
+    query << %(, CONSTRAINT "#{table_name}_pkey" PRIMARY KEY ("#{primary_key}"))
     query << ");"
     exec_params query, []
-  end
-
-  def set_primary_key table_name, column
-    exec_params(%(ALTER TABLE "#{table_name}" DROP CONSTRAINT IF EXISTS "#{table_name}_pkey";))
-    exec_params(%(ALTER TABLE "#{table_name}" ADD PRIMARY KEY ("#{column}");))
   end
 
   def exists? table_name
