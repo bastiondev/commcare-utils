@@ -69,26 +69,30 @@ class DestinationSource < ApplicationRecord
     indices.each do |index_name, index_data|
       properties_to_upsert["indices.#{index_data['case_type']}"] = index_data['case_id']
     end
-    ensure_table properties_to_upsert.keys
-    upsert_row properties_to_upsert.keys, properties_to_upsert.values, DateTime.now
+    with_writer do
+      ensure_table properties_to_upsert.keys
+      upsert_row properties_to_upsert.keys, properties_to_upsert.values, DateTime.now
+    end
   end
 
   def sync_source
     headers = nil
     start_time = DateTime.now
     num_rows = 0
-    parse_source do |row|
-      unless headers
-        headers = sanitize_headers row
-        ensure_table headers, true
-      else
-        upsert_row headers, row, start_time
-        num_rows = num_rows + 1
+    with_writer do
+      parse_source do |row|
+        unless headers
+          headers = sanitize_headers row
+          ensure_table headers, true
+        else
+          upsert_row headers, row, start_time
+          num_rows = num_rows + 1
+        end
       end
-    end
-    if num_rows > 0
-      Rails.logger.info "Synced #{num_rows} rows from destination source #{id}"
-      delete_rows_updated_before start_time
+      if num_rows > 0
+        Rails.logger.info "Synced #{num_rows} rows from destination source #{id}"
+        delete_rows_updated_before start_time
+      end
     end
     return num_rows
   end

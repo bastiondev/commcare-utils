@@ -65,8 +65,23 @@ module TableWritable
     @database_writer ||= DatabaseWriter.new(destination.database_url_for_connection)
   end
 
+  # Runs the block and closes the writer's connection afterwards, even on error.
+  # DatabaseWriter uses a raw PG connection outside the ActiveRecord pool, so it
+  # must be closed explicitly or it leaks until GC. Nested calls reuse the
+  # outer connection and leave closing to the outermost call.
+  def with_writer
+    return yield if @with_writer_active
+    begin
+      @with_writer_active = true
+      yield
+    ensure
+      @with_writer_active = false
+      finish_writer
+    end
+  end
+
   def finish_writer
-    @database_writer.close
+    @database_writer&.close
     @database_writer = nil
   end
 

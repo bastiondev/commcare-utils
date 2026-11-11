@@ -8,7 +8,9 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Must cover both Puma threads (RAILS_MAX_THREADS) and the good_job worker,
+  # which needs GOOD_JOB_MAX_THREADS + 2 (LISTEN/NOTIFY and cron connections).
+  pool: <%= [ENV.fetch("RAILS_MAX_THREADS", 3).to_i, ENV.fetch("GOOD_JOB_MAX_THREADS", 5).to_i + 2].max %>
   url: <%= ENV["DATABASE_URL"] %>
   schema_search_path: "public"
 
